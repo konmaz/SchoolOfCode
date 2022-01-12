@@ -1,14 +1,14 @@
-from .models import Post
+from .models import Movie
 from ariadne import convert_kwargs_to_snake_case
 
 
-def listPosts_resolver(obj, info):
+def listMovies_resolver(obj, info):
     try:
-        posts = [post.to_dict() for post in Post.query.all()]
-        print(posts)
+        movies = [_.to_dict() for _ in Movie.query.all()]
+        print(movies)
         payload = {
             "success": True,
-            "posts": posts
+            "movies": movies
         }
     except Exception as error:
         payload = {
@@ -19,12 +19,12 @@ def listPosts_resolver(obj, info):
 
 
 @convert_kwargs_to_snake_case
-def getPost_resolver(obj, info, id):
+def getMovie_resolver(obj, info, id):
     try:
-        post = Post.query.get(id)
+        movie = Movie.query.get(id)
         payload = {
             "success": True,
-            "post": post.to_dict()
+            "post": movie.to_dict()
         }
 
     except AttributeError:  # todo not found

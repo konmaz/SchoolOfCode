@@ -3,21 +3,21 @@ from datetime import date
 from ariadne import convert_kwargs_to_snake_case
 
 from api import db
-from api.models import Post
+from api.models import Movie
 
 
 @convert_kwargs_to_snake_case
-def create_post_resolver(obj, info, title, description):
+def create_movie_resolver(obj, info, title, description):
     try:
         today = date.today()
-        post = Post(
+        movie = Movie(
             title=title, description=description, created_at=today.strftime("%b-%d-%Y")
         )
-        db.session.add(post)
+        db.session.add(movie)
         db.session.commit()
         payload = {
             "success": True,
-            "post": post.to_dict()
+            "movie": movie.to_dict()
         }
     except ValueError:  # date format errors
         payload = {
@@ -29,17 +29,17 @@ def create_post_resolver(obj, info, title, description):
     return payload
 
 @convert_kwargs_to_snake_case
-def update_post_resolver(obj, info, id, title, description):
+def update_movie_resolver(obj, info, id, title, description):
     try:
-        post = Post.query.get(id)
-        if post:
-            post.title = title
-            post.description = description
-        db.session.add(post)
+        movie = Movie.query.get(id)
+        if movie:
+            movie.title = title
+            movie.description = description
+        db.session.add(movie)
         db.session.commit()
         payload = {
             "success": True,
-            "post": post.to_dict()
+            "movie": movie.to_dict()
         }
 
     except AttributeError:  # todo not found
@@ -51,12 +51,12 @@ def update_post_resolver(obj, info, id, title, description):
     return payload
 
 @convert_kwargs_to_snake_case
-def delete_post_resolver(obj, info, id):
+def delete_movie_resolver(obj, info, id):
     try:
-        post = Post.query.get(id)
-        db.session.delete(post)
+        movie = Movie.query.get(id)
+        db.session.delete(movie)
         db.session.commit()
-        payload = {"success": True, "post": post.to_dict()}
+        payload = {"success": True, "movie": movie.to_dict()}
 
     except AttributeError:
         payload = {
