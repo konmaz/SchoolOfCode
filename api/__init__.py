@@ -5,9 +5,14 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 CORS(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://hlgyweed:ThuCJeRt-3ZdvPgyj_kq7lBM5rVxLLNp@tai.db.elephantsql.com/hlgyweed"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://hlgyweed:ThuCJeRt-3ZdvPgyj_kq7lBM5rVxLLNp@tai.db.elephantsql.com/hlgyweed"
+
+app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///registration.db'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+
 db = SQLAlchemy(app)
+
 
 @app.route('/')
 def hello():
