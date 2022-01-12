@@ -1,17 +1,12 @@
+
 from flask import Flask
-from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-CORS(app)
-
-# app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://hlgyweed:ThuCJeRt-3ZdvPgyj_kq7lBM5rVxLLNp@tai.db.elephantsql.com/hlgyweed"
-
-app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///registration.db'
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://ngimluxm:zK59sGLE3DXX41RwivZ3MoceL5zGMqSu@stampy.db.elephantsql.com:5432/ngimluxm"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-
 db = SQLAlchemy(app)
+
 
 
 @app.route('/')
