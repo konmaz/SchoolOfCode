@@ -8,6 +8,7 @@ type Movie {
     title: String!
     description: String!
     created_at: String!
+    year: String!
 }
 
 type MovieResult {
@@ -22,13 +23,44 @@ type MoviesResult {
     movies: [Movie]
 }
 
+type CastMemberResult  {
+    success: Boolean!
+    errors: [String]
+    castMembers: CastMember
+}
+
+
+type CastMembersResult  {
+    success: Boolean!
+    errors: [String]
+    castMembers: [CastMember]
+}
+
 type Query {
     listMovies: MoviesResult!
     getMovie(id: ID!): MovieResult!
 }
 
 type Mutation {
-    createMovie(title: String!, description: String!, created_at: String): MovieResult!
+    createMovie(title: String!, description: String!, year: String!): MovieResult!
     updateMovie(id: ID!, title: String, description: String): MovieResult!
     deleteMovie(id: ID): MovieResult!
+    createCastMember(name: String!): CastMemberResult!
+    addCastMemberInMovie(castID: ID!, movieID: ID!, type:CastMemberType!): Boolean!
+}
+
+type CastMember {
+    id: ID!
+    name: String!
+}
+
+type ParticipationCastMovie {
+    id: ID!
+    name: String!
+    type: CastMemberType!
+}
+enum CastMemberType {
+  ACTOR
+  DIRECTOR
+  WRITER
 }

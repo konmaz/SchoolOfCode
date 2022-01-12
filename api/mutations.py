@@ -3,15 +3,18 @@ from datetime import date
 from ariadne import convert_kwargs_to_snake_case
 
 from api import db
-from api.models import Movie
+from api.models import Movie, CastMember, takes_part, CastType
 
 
 @convert_kwargs_to_snake_case
-def create_movie_resolver(obj, info, title, description):
+def create_movie_resolver(obj, info, title, description, year):
     try:
         today = date.today()
         movie = Movie(
-            title=title, description=description, created_at=today.strftime("%b-%d-%Y")
+            title=title,
+            description=description,
+            year=year,
+            created_at=date.today()
         )
         db.session.add(movie)
         db.session.commit()
@@ -27,6 +30,7 @@ def create_movie_resolver(obj, info, title, description):
         }
 
     return payload
+
 
 @convert_kwargs_to_snake_case
 def update_movie_resolver(obj, info, id, title, description):
@@ -50,6 +54,7 @@ def update_movie_resolver(obj, info, id, title, description):
 
     return payload
 
+
 @convert_kwargs_to_snake_case
 def delete_movie_resolver(obj, info, id):
     try:
@@ -65,3 +70,50 @@ def delete_movie_resolver(obj, info, id):
         }
 
     return payload
+
+
+@convert_kwargs_to_snake_case
+def create_movie_cast_member_resolver(obj, info, name):
+    try:
+        castMember = CastMember(
+            name=name
+        )
+        db.session.add(castMember)
+        db.session.commit()
+        payload = {
+            "success": True,
+            "castMember": castMember.to_dict()
+        }
+    except ValueError:  # date format errors
+        payload = {
+            "success": False,
+            "errors": [f"Incorrect date format provided. Date should be in "
+                       f"the format dd-mm-yyyy"]
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [e]
+        }
+
+    return payload
+@convert_kwargs_to_snake_case
+def addCastMemberInMovie(obj, info,cast_id, movie_id, cast_member_type):
+    try:
+        movieObj = Movie.query.get(movie_id)
+        castMemberObj = CastMember.query.get(cast_id)
+        movieObj.takes_partField.append(castMemberObj)
+        statement = takes_part.insert().values(castMember_id=castMemberObj.id, movie_id=movieObj.id, type=CastType.ACTOR)
+        db.session.execute(statement)
+        db.session.commit()
+
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": ["Not found"]
+        }
+    except Exception:
+        payload = {
+            "success": False,
+            "errors": [f"Unknown error"]
+        }

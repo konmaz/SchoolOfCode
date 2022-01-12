@@ -7,7 +7,7 @@ from flask import request, jsonify
 
 from api.models import Movie
 from api.queries import listMovies_resolver, getMovie_resolver
-from api.mutations import create_movie_resolver, update_movie_resolver, delete_movie_resolver
+from api.mutations import create_movie_resolver, update_movie_resolver, delete_movie_resolver, create_movie_cast_member_resolver, addCastMemberInMovie
 
 query = ObjectType("Query")
 mutation = ObjectType("Mutation")
@@ -18,21 +18,23 @@ query.set_field("getMovie", getMovie_resolver)
 mutation.set_field("createMovie", create_movie_resolver)
 mutation.set_field("updateMovie", update_movie_resolver)
 mutation.set_field("deleteMovie", delete_movie_resolver)
+mutation.set_field("createCastMember", create_movie_cast_member_resolver)
+mutation.set_field("addCastMemberInMovie", addCastMemberInMovie)
 
 type_defs = load_schema_from_path("schema.graphql")
 schema = make_executable_schema(
     type_defs, query, mutation, snake_case_fallback_resolvers
 )
 
-from datetime import datetime
-db.create_all()
-newMovieObj = Movie(title="Pulp Fiction",
-                    description="The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
-                    year="1994",
-                    created_at=datetime.today().date(),
-                    )
-db.session.add(newMovieObj)
-db.session.commit()
+# from datetime import datetime
+# db.create_all()
+# newMovieObj = Movie(title="Pulp Fiction",
+#                     description="The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+#                     year="1994",
+#                     created_at=datetime.today().date(),
+#                     )
+# db.session.add(newMovieObj)
+# db.session.commit()
 
 
 @app.route("/graphql", methods=["GET"])
