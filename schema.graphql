@@ -9,7 +9,7 @@ type Movie {
     description: String!
     created_at: String!
     year: String!
-    dokimi: String!
+    dokimi: String
 }
 
 type MovieResult {

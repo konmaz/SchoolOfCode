@@ -1,12 +1,12 @@
+from api import app, db
+
 from ariadne import load_schema_from_path, make_executable_schema, \
     graphql_sync, snake_case_fallback_resolvers, ObjectType
 from ariadne.constants import PLAYGROUND_HTML
 from flask import request, jsonify
 
-from api import app, db
-from api.mutations import create_movie_resolver, update_movie_resolver, delete_movie_resolver, \
-    create_movie_cast_member_resolver, addCastMemberInMovie
 from api.queries import listMovies_resolver, getMovie_resolver
+from api.mutations import create_movie_resolver, update_movie_resolver, delete_movie_resolver, create_movie_cast_member_resolver, addCastMemberInMovie
 
 query = ObjectType("Query")
 mutation = ObjectType("Mutation")
@@ -34,8 +34,6 @@ schema = make_executable_schema(
 #                     )
 # db.session.add(newMovieObj)
 # db.session.commit()
-db.create_all()
-db.session.commit()
 
 
 @app.route("/graphql", methods=["GET"])
@@ -56,7 +54,3 @@ def graphql_server():
 
     status_code = 200 if success else 400
     return jsonify(result), status_code
-
-
-if __name__ == "__main__":
-    app.run(debug=True)

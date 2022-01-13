@@ -1,5 +1,7 @@
 import enum
 
+from sqlalchemy import select
+
 from app import db
 
 
@@ -25,7 +27,7 @@ class Movie(db.Model):
     year = db.Column(db.String)
     created_at = db.Column(db.Date)
     takes_partField: db.Table = db.relationship('CastMember', secondary=takes_part, lazy='subquery',
-                           backref=db.backref('movie', lazy=True))
+                                                backref=db.backref('movie', lazy=True))
 
     def to_dict(self):
         return {
@@ -33,11 +35,10 @@ class Movie(db.Model):
             "title": self.title,
             "description": self.description,
             "year": self.year,
-            "created_at": self.created_at
-        }
+            "created_at": self.created_at,
+            "dokimi": ["TIPOTA AKOMA"],
 
-    def getMovieCast(self, castID):
-        return 0
+        }
 
 
 class CastMember(db.Model):
@@ -50,3 +51,4 @@ class CastMember(db.Model):
             "id": self.id,
             "name": self.name
         }
+

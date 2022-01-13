@@ -3,14 +3,12 @@ from datetime import date
 import graphql.error.graphql_error
 from ariadne import convert_kwargs_to_snake_case
 
-
+from api import db
+from api.models import Movie, CastMember, takes_part, CastType
 
 
 @convert_kwargs_to_snake_case
 def create_movie_resolver(obj, info, title, description, year):
-    from api import db
-    from api.models import Movie, CastMember, takes_part, CastType
-
     try:
         today = date.today()
         movie = Movie(
@@ -38,8 +36,6 @@ def create_movie_resolver(obj, info, title, description, year):
 @convert_kwargs_to_snake_case
 def update_movie_resolver(obj, info, id, title, description):
     try:
-        from api import db
-        from api.models import Movie, CastMember, takes_part, CastType
         movie = Movie.query.get(id)
         if movie:
             movie.title = title
@@ -62,8 +58,6 @@ def update_movie_resolver(obj, info, id, title, description):
 
 @convert_kwargs_to_snake_case
 def delete_movie_resolver(obj, info, id):
-    from api import db
-    from api.models import Movie, CastMember, takes_part, CastType
     try:
         movie = Movie.query.get(id)
         db.session.delete(movie)
@@ -81,8 +75,6 @@ def delete_movie_resolver(obj, info, id):
 
 @convert_kwargs_to_snake_case
 def create_movie_cast_member_resolver(obj, info, name):
-    from api import db
-    from api.models import Movie, CastMember, takes_part, CastType
     try:
         castMember = CastMember(
             name=name
@@ -110,9 +102,6 @@ def create_movie_cast_member_resolver(obj, info, name):
 
 @convert_kwargs_to_snake_case
 def addCastMemberInMovie(obj, info, cast_id, movie_id, category):
-    from api import db
-    from api.models import Movie, CastMember, takes_part, CastType
-
     try:
         print(category)
         movieObj = Movie.query.get(movie_id)
