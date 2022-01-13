@@ -1,5 +1,6 @@
 from datetime import date
 
+import graphql.error.graphql_error
 from ariadne import convert_kwargs_to_snake_case
 
 from api import db
@@ -97,23 +98,33 @@ def create_movie_cast_member_resolver(obj, info, name):
         }
 
     return payload
+
+
 @convert_kwargs_to_snake_case
-def addCastMemberInMovie(obj, info,cast_id, movie_id, cast_member_type):
+def addCastMemberInMovie(obj, info, cast_id, movie_id, category):
     try:
+        print(category)
         movieObj = Movie.query.get(movie_id)
         castMemberObj = CastMember.query.get(cast_id)
-        movieObj.takes_partField.append(castMemberObj)
-        statement = takes_part.insert().values(castMember_id=castMemberObj.id, movie_id=movieObj.id, type=CastType.ACTOR)
+
+        statement = takes_part.insert().values(castMember_id=castMemberObj.id, movie_id=movieObj.id,
+                                               type=CastType[category])
         db.session.execute(statement)
         db.session.commit()
+        payload = {
+            "success": True,
+            "errors": []
+        }
 
+    except graphql.error.graphql_error.GraphQLError:
+        payload = {
+            "success": False,
+            "errors": ["Already exists"]
+        }
     except AttributeError:
         payload = {
             "success": False,
             "errors": ["Not found"]
         }
-    except Exception:
-        payload = {
-            "success": False,
-            "errors": [f"Unknown error"]
-        }
+
+    return payload

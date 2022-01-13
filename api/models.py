@@ -10,8 +10,9 @@ class CastType(enum.Enum):
 
 
 takes_part = db.Table('takes_part',
-                      db.Column('castMember_id', db.Integer, db.ForeignKey('castMember.id'), primary_key=True),
-                      db.Column('movie_id', db.Integer, db.ForeignKey('movie.id'), primary_key=True),
+                      db.Column('id', db.Integer, primary_key=True),
+                      db.Column('castMember_id', db.Integer, db.ForeignKey('castMember.id')),
+                      db.Column('movie_id', db.Integer, db.ForeignKey('movie.id')),
                       db.Column('type', db.Enum(CastType))  # director or actor
                       )
 

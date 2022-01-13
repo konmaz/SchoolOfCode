@@ -36,6 +36,11 @@ type CastMembersResult  {
     castMembers: [CastMember]
 }
 
+type GeneralMulResult{
+    success: Boolean!
+    errors: [String]
+}
+
 type Query {
     listMovies: MoviesResult!
     getMovie(id: ID!): MovieResult!
@@ -46,7 +51,7 @@ type Mutation {
     updateMovie(id: ID!, title: String, description: String): MovieResult!
     deleteMovie(id: ID): MovieResult!
     createCastMember(name: String!): CastMemberResult!
-    addCastMemberInMovie(castID: ID!, movieID: ID!, type:CastMemberType!): Boolean!
+    addCastMemberInMovie(castID: ID!, movieID: ID!, category:CastMemberType!): GeneralMulResult!
 }
 
 type CastMember {

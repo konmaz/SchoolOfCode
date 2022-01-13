@@ -35,7 +35,8 @@ schema = make_executable_schema(
 #                     )
 # db.session.add(newMovieObj)
 # db.session.commit()
-
+db.create_all()
+db.session.commit()
 
 @app.route("/graphql", methods=["GET"])
 def graphql_playground():
