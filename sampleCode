@@ -1,0 +1,9 @@
+# Add new member
+mutation {
+  createCastMember(
+    name: "Person1"
+  ) { success
+    errors
+  }
+}
+-------------
