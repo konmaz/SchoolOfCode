@@ -24,7 +24,7 @@ class Movie(db.Model):
     description = db.Column(db.String)
     year = db.Column(db.String)
     created_at = db.Column(db.Date)
-    takes_partField = db.relationship('CastMember', secondary=takes_part, lazy='subquery',
+    takes_partField: db.Table = db.relationship('CastMember', secondary=takes_part, lazy='subquery',
                            backref=db.backref('movie', lazy=True))
 
     def to_dict(self):
@@ -35,6 +35,9 @@ class Movie(db.Model):
             "year": self.year,
             "created_at": self.created_at
         }
+
+    def getMovieCast(self, castID):
+        return 0
 
 
 class CastMember(db.Model):

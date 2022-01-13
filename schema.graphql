@@ -9,6 +9,7 @@ type Movie {
     description: String!
     created_at: String!
     year: String!
+    dokimi: String!
 }
 
 type MovieResult {
@@ -28,7 +29,6 @@ type CastMemberResult  {
     errors: [String]
     castMembers: CastMember
 }
-
 
 type CastMembersResult  {
     success: Boolean!
