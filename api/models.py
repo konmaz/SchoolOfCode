@@ -39,10 +39,11 @@ class Movie(db.Model):
         x = []
         _: TakesPart
         for _ in self.children:
-            x.append(_.castMember_id)
-            castMemberObj: CastMember = CastMember.query.get(_.castMember_id)
-            x.append(castMemberObj.name)
-            x.append(_.type.name)
+            x.append({
+                "idOfCastMember": _.castMember_id,
+                "name": CastMember.query.get(_.castMember_id).name,
+                "type": _.type.name
+                })
 
         return {
             "id": self.id,
@@ -50,7 +51,7 @@ class Movie(db.Model):
             "description": self.description,
             "year": self.year,
             "created_at": self.created_at,
-            "dokimi": str(x)
+            "cast_members": str(x)
         }
 
 

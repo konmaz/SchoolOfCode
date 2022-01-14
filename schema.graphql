@@ -9,7 +9,7 @@ type Movie {
     description: String!
     created_at: String!
     year: String!
-    dokimi: String
+    cast_members: String
 }
 
 type MovieResult {
@@ -59,8 +59,8 @@ type CastMember {
     name: String!
 }
 
-type ParticipationCastMovie {
-    id: ID!
+type ParticipationCastInMovie {
+    idOfCastMember: ID!
     name: String!
     type: CastMemberType!
 }
