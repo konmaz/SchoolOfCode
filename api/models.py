@@ -62,10 +62,21 @@ class CastMember(db.Model):
 
     parents = db.relationship("TakesPart", back_populates="child")
 
+
     def to_dict(self):
+        x = []
+        _: TakesPart
+        for _ in self.parents:
+            x.append({
+                "": _.castMember_id,
+                "movie": Movie.query.get(_.movie_id).to_dict(),
+                "type": _.type.name
+                })
+
         return {
             "id": self.id,
-            "name": self.name
+            "name": self.name,
+            "movies_catalog": x
         }
 
 # takes_part = db.Table('takes_part',

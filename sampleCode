@@ -7,3 +7,52 @@ mutation {
   }
 }
 -------------
+query{
+  listMovies{
+
+    movies{
+      title
+			cast_members{
+        name
+        type
+      }
+    }
+    success
+    errors
+  }
+}
+-------------
+mutation {
+  addCastMemberInMovie(
+    movieID:1
+    castID:2
+    category:ACTOR
+  ) {
+    success
+    errors
+  }
+}
+-----------
+query{
+  listCastMembers{
+    cast_members{
+      id
+      name
+      movies_catalog{
+        type
+        movie{title}
+      }
+    }
+  }
+}
+----------
+mutation{
+  updateCastMember(existingID: 2 name:"John Travolta"){
+    errors
+    success
+    cast_member{
+      id
+      name
+    }
+  }
+}

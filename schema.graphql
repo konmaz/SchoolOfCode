@@ -27,13 +27,13 @@ type MoviesResult {
 type CastMemberResult  {
     success: Boolean!
     errors: [String]
-    castMembers: CastMember
+    cast_member: CastMember
 }
 
 type CastMembersResult  {
     success: Boolean!
     errors: [String]
-    castMembers: [CastMember]
+    cast_members: [CastMember]
 }
 
 type GeneralMulResult{
@@ -44,6 +44,7 @@ type GeneralMulResult{
 type Query {
     listMovies: MoviesResult!
     getMovie(id: ID!): MovieResult!
+    listCastMembers: CastMembersResult
 }
 
 type Mutation {
@@ -52,11 +53,13 @@ type Mutation {
     deleteMovie(id: ID): MovieResult!
     createCastMember(name: String!): CastMemberResult!
     addCastMemberInMovie(castID: ID!, movieID: ID!, category:CastMemberType!): GeneralMulResult!
+    updateCastMember(existingID: ID! ,name: String!): CastMemberResult!
 }
 
 type CastMember {
     id: ID!
     name: String!
+    movies_catalog: [ParticipationOfMovie]
 }
 
 type ParticipationCastInMovie {
@@ -64,6 +67,13 @@ type ParticipationCastInMovie {
     name: String!
     type: CastMemberType!
 }
+
+type ParticipationOfMovie {
+    type: CastMemberType!
+    movie: Movie!
+}
+
+
 enum CastMemberType {
   ACTOR
   DIRECTOR

@@ -39,3 +39,18 @@ def getMovie_resolver(obj, info, id):
         }
 
     return payload
+
+def listCastMembers_resolver(obj, info):
+    try:
+        castMembers = [_.to_dict() for _ in CastMember.query.all()]
+
+        payload = {
+            "success": True,
+            "cast_members": castMembers
+        }
+    except Exception as error:
+        payload = {
+            "success": False,
+            "errors": [str(error)]
+        }
+    return payload

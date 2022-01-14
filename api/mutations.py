@@ -116,13 +116,33 @@ def addCastMemberInMovie(obj, info, cast_id, movie_id, category):
         db.session.commit()
         payload = {
             "success": True,
-            "errors": []
+            "errors": [],
         }
 
     except graphql.error.graphql_error.GraphQLError:
         payload = {
             "success": False,
             "errors": ["Already exists"]
+        }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": ["Not found"]
+        }
+
+    return payload
+
+
+@convert_kwargs_to_snake_case
+def updateCastMember(obj, info, existing_id, name):
+    try:
+        castMemberObj: CastMember = CastMember.query.get(existing_id)
+        castMemberObj.name = name
+        db.session.commit()
+        payload = {
+            "success": True,
+            "errors": [],
+            "cast_member": castMemberObj.to_dict()
         }
     except AttributeError:
         payload = {

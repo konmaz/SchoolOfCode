@@ -6,22 +6,24 @@ from ariadne.constants import PLAYGROUND_HTML
 from flask import request, jsonify, Flask
 
 from api.models import Movie
-from api.queries import listMovies_resolver, getMovie_resolver
+from api.queries import listMovies_resolver, getMovie_resolver, listCastMembers_resolver
 from api.mutations import create_movie_resolver, update_movie_resolver, delete_movie_resolver, \
-    create_movie_cast_member_resolver, addCastMemberInMovie
+    create_movie_cast_member_resolver, addCastMemberInMovie, updateCastMember
 
 query = ObjectType("Query")
 mutation = ObjectType("Mutation")
 
 query.set_field("listMovies", listMovies_resolver)
 query.set_field("getMovie", getMovie_resolver)
+query.set_field("listCastMembers", listCastMembers_resolver)
+
 
 mutation.set_field("createMovie", create_movie_resolver)
 mutation.set_field("updateMovie", update_movie_resolver)
 mutation.set_field("deleteMovie", delete_movie_resolver)
 mutation.set_field("createCastMember", create_movie_cast_member_resolver)
 mutation.set_field("addCastMemberInMovie", addCastMemberInMovie)
-
+mutation.set_field("updateCastMember",updateCastMember)
 type_defs = load_schema_from_path("schema.graphql")
 schema = make_executable_schema(
     type_defs, query, mutation, snake_case_fallback_resolvers
