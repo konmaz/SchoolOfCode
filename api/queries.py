@@ -1,4 +1,4 @@
-from .models import Movie, CastMember, takes_part, CastType
+from .models import Movie, CastMember, TakesPart, CastType
 from ariadne import convert_kwargs_to_snake_case
 
 
@@ -22,10 +22,9 @@ def listMovies_resolver(obj, info):
 def getMovie_resolver(obj, info, id):
     try:
         movie = Movie.query.get(id)
-        castMembers = movie.takes_partField
         payload = {
             "success": True,
-            "movie": movie.to_dict() | {"dokimi": castMembers[0]},
+            "movie": movie.to_dict()
         }
 
     except AttributeError:  # todo not found

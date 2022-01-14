@@ -1,7 +1,4 @@
 import enum
-
-from sqlalchemy import select
-
 from app import db
 
 
@@ -11,12 +8,22 @@ class CastType(enum.Enum):
     WRITER = 3
 
 
-takes_part = db.Table('takes_part',
-                      db.Column('id', db.Integer, primary_key=True),
-                      db.Column('castMember_id', db.Integer, db.ForeignKey('castMember.id')),
-                      db.Column('movie_id', db.Integer, db.ForeignKey('movie.id')),
-                      db.Column('type', db.Enum(CastType))  # director or actor
-                      )
+class TakesPart(db.Model):
+    __tablename__ = 'associationTakesPart'
+    id = db.Column(db.Integer, primary_key=True)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'))
+    castMember_id = db.Column(db.Integer, db.ForeignKey('castMember.id'))
+    type = db.Column(db.Enum(CastType))
+    child = db.relationship("CastMember", back_populates="parents")
+    parent = db.relationship("Movie", back_populates="children")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "movie_id": self.movie_id,
+            "castMember_id": self.castMember_id,
+            "type": self.type,
+        }
 
 
 class Movie(db.Model):
@@ -26,18 +33,24 @@ class Movie(db.Model):
     description = db.Column(db.String)
     year = db.Column(db.String)
     created_at = db.Column(db.Date)
-    takes_partField: db.Table = db.relationship('CastMember', secondary=takes_part, lazy='subquery',
-                                                backref=db.backref('movie', lazy=True))
+    children = db.relationship("TakesPart", back_populates="parent")
 
     def to_dict(self):
+        x = []
+        _: TakesPart
+        for _ in self.children:
+            x.append(_.castMember_id)
+            castMemberObj: CastMember = CastMember.query.get(_.castMember_id)
+            x.append(castMemberObj.name)
+            x.append(_.type.name)
+
         return {
             "id": self.id,
             "title": self.title,
             "description": self.description,
             "year": self.year,
             "created_at": self.created_at,
-            "dokimi": ["TIPOTA AKOMA"],
-
+            "dokimi": str(x)
         }
 
 
@@ -46,9 +59,17 @@ class CastMember(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
+    parents = db.relationship("TakesPart", back_populates="child")
+
     def to_dict(self):
         return {
             "id": self.id,
             "name": self.name
         }
 
+# takes_part = db.Table('takes_part',
+#                       db.Column('id', db.Integer, primary_key=True),
+#                       db.Column('castMember_id', db.Integer, db.ForeignKey('castMember.id')),
+#                       db.Column('movie_id', db.Integer, db.ForeignKey('movie.id')),
+#                       db.Column('type', db.Enum(CastType))  # director or actor
+#                       )

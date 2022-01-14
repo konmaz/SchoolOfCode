@@ -4,7 +4,7 @@ import graphql.error.graphql_error
 from ariadne import convert_kwargs_to_snake_case
 
 from api import db
-from api.models import Movie, CastMember, takes_part, CastType
+from api.models import Movie, CastMember, TakesPart, CastType
 
 
 @convert_kwargs_to_snake_case
@@ -104,12 +104,15 @@ def create_movie_cast_member_resolver(obj, info, name):
 def addCastMemberInMovie(obj, info, cast_id, movie_id, category):
     try:
         print(category)
-        movieObj = Movie.query.get(movie_id)
-        castMemberObj = CastMember.query.get(cast_id)
+        movieObj: Movie = Movie.query.get(movie_id)
+        castMemberObj: CastMember = CastMember.query.get(cast_id)
 
-        statement = takes_part.insert().values(castMember_id=castMemberObj.id, movie_id=movieObj.id,
-                                               type=CastType[category])
-        db.session.execute(statement)
+        takesPartObj: TakesPart = TakesPart(movie_id=movieObj.id,
+                                            castMember_id=castMemberObj.id,
+                                            type=CastType[category])
+        movieObj.children.append(takesPartObj)
+        castMemberObj.parents.append(takesPartObj)
+
         db.session.commit()
         payload = {
             "success": True,

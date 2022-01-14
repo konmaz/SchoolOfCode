@@ -3,10 +3,12 @@ from api import app, db
 from ariadne import load_schema_from_path, make_executable_schema, \
     graphql_sync, snake_case_fallback_resolvers, ObjectType
 from ariadne.constants import PLAYGROUND_HTML
-from flask import request, jsonify
+from flask import request, jsonify, Flask
 
+from api.models import Movie
 from api.queries import listMovies_resolver, getMovie_resolver
-from api.mutations import create_movie_resolver, update_movie_resolver, delete_movie_resolver, create_movie_cast_member_resolver, addCastMemberInMovie
+from api.mutations import create_movie_resolver, update_movie_resolver, delete_movie_resolver, \
+    create_movie_cast_member_resolver, addCastMemberInMovie
 
 query = ObjectType("Query")
 mutation = ObjectType("Mutation")
@@ -25,7 +27,8 @@ schema = make_executable_schema(
     type_defs, query, mutation, snake_case_fallback_resolvers
 )
 
-# from datetime import datetime
+from datetime import datetime
+
 # db.create_all()
 # newMovieObj = Movie(title="Pulp Fiction",
 #                     description="The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
@@ -33,6 +36,7 @@ schema = make_executable_schema(
 #                     created_at=datetime.today().date(),
 #                     )
 # db.session.add(newMovieObj)
+#
 # db.session.commit()
 
 
