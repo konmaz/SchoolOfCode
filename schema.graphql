@@ -9,7 +9,7 @@ type Movie {
     description: String!
     created_at: String!
     year: String!
-    cast_members: String
+    cast_members: [ParticipationCastInMovie]
 }
 
 type MovieResult {

@@ -51,7 +51,7 @@ class Movie(db.Model):
             "description": self.description,
             "year": self.year,
             "created_at": self.created_at,
-            "cast_members": str(x)
+            "cast_members": x
         }
 
 
